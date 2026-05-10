@@ -336,15 +336,52 @@
       animation: burn 1s infinite ease-in-out, flame-rise 1s forwards ease-in-out;
     }
 
-    .gallery-item video {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
-  max-height: none;
-  aspect-ratio: auto;
-  margin-bottom: 20px;
-}
+    /* Custom video player */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+      cursor: pointer;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .play-pause-btn {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0, 0, 0, 0.25);
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .video-wrapper:hover .play-pause-btn,
+    .video-wrapper.paused .play-pause-btn {
+      opacity: 0.45;
+    }
+
+    .play-pause-btn:hover {
+      opacity: 0.75 !important;
+    }
+
+    .play-pause-btn svg {
+      fill: #fff;
+      width: 12px;
+      height: 12px;
+    }
 
     @keyframes burn {
       0% { transform: scale(0.7) translateY(10px) rotate(0deg); opacity: 0.95; }
@@ -446,8 +483,42 @@
       <div class="shop-column">
         <div class="section-header"><img src="img/kinetic.png" alt="Drawing Icon" /></div>
         <div class="gallery-item">
-          <video src="kinetic1.MOV" controls></video>
-          <video src="kinetic2.MOV" controls></video>
+          <div class="video-wrapper paused">
+            <video src="img\cheerleader.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="video-wrapper paused">
+            <video src="img\garbage.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="video-wrapper paused">
+            <video src="img/objectterrible.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="video-wrapper paused">
+            <video src="img\sponge.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="video-wrapper paused">
+            <video src="img\opener.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
+          <div class="video-wrapper paused">
+            <video src="img\gaga.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -466,7 +537,14 @@
 
       <div class="shop-column">
         <div class="section-header"><img src="img/objects.png" alt="objects Icon" /></div>
-        <div class="gallery-item"><img src="img/obj1.jpeg" alt="noname" /></div>
+        <div class="gallery-item"><img src="img\tel.JPG" alt="noname" /></div>
+        <div class="gallery-item"><img src="img\terrible.JPG" alt="noname" /></div>
+        <div class="gallery-item"><img src="img\dart.JPG" alt="noname" /></div>
+          <div class="video-wrapper paused">
+            <video src="img\chicken.MP4"></video>
+            <button class="play-pause-btn" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </button>
       </div>
 
     </div>
@@ -496,6 +574,7 @@
   </footer>
 
   <script>
+    
     const galleryItems = document.querySelectorAll(".gallery-item img");
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
@@ -515,11 +594,43 @@
     });
 
     lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) {
-        lightbox.style.display = "none";
-      }
+      if (e.target === lightbox) lightbox.style.display = "none";
     });
 
+    
+    const playIcon = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg>`;
+    const pauseIcon = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>`;
+
+    document.querySelectorAll(".video-wrapper").forEach(wrapper => {
+      const video = wrapper.querySelector("video");
+      const btn = wrapper.querySelector(".play-pause-btn");
+
+      function togglePlay() {
+        if (video.paused) {
+          video.play();
+          btn.innerHTML = pauseIcon;
+          wrapper.classList.remove("paused");
+        } else {
+          video.pause();
+          btn.innerHTML = playIcon;
+          wrapper.classList.add("paused");
+        }
+      }
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        togglePlay();
+      });
+
+      video.addEventListener("click", togglePlay);
+
+      video.addEventListener("ended", () => {
+        btn.innerHTML = playIcon;
+        wrapper.classList.add("paused");
+      });
+    });
+
+    
     const match = document.getElementById("match");
     const matchbox = document.getElementById("matchbox");
     const matchHeight = 80;
@@ -544,4 +655,3 @@
   </script>
 </body>
 </html>
-```
