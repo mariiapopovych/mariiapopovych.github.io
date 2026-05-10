@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mariia Popovych</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet">
 
   <style>
-
-
     * {
       margin: 0;
       padding: 0;
@@ -349,6 +347,9 @@
       height: auto;
       display: block;
       object-fit: contain;
+      /* Reserve space so layout doesn't jump when video loads */
+      min-height: 180px;
+      background: #f0f0f0;
     }
 
     .play-pause-btn {
@@ -381,6 +382,18 @@
       fill: #fff;
       width: 12px;
       height: 12px;
+    }
+
+    /* Lazy load placeholder shimmer */
+    .video-wrapper.not-loaded video {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     @keyframes burn {
@@ -439,6 +452,11 @@
         width: 80%;
         max-height: 50vh;
       }
+
+      /* On mobile, give videos a fixed aspect ratio so shimmer looks right */
+      .video-wrapper video {
+        min-height: 220px;
+      }
     }
   </style>
 </head>
@@ -454,7 +472,7 @@
   </div>
 
   <div class="scroll-frames" id="scrollFrames">
-    <img src="img\ezgif.com-animated-gif-maker.gif" class="bg-gif" alt="background" />
+    <img src="img/ezgif.com-animated-gif-maker.gif" class="bg-gif" alt="background" loading="lazy" />
     <div class="contact-overlay">
       <img src="img/contact.png" alt="Contact Title" />
       <div class="contact-links">
@@ -483,68 +501,83 @@
       <div class="shop-column">
         <div class="section-header"><img src="img/kinetic.png" alt="Drawing Icon" /></div>
         <div class="gallery-item">
-          <div class="video-wrapper paused">
-            <video src="img\cheerleader.MP4"></video>
+
+          <!-- KEY CHANGES:
+               1. src → data-src  (no network request until visible)
+               2. preload="none"  (browser won't buffer anything)
+               3. playsinline     (required for autoplay/inline play on iOS)
+               4. class="not-loaded" on wrapper → removed by IntersectionObserver
+          -->
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/cheerleader.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
-          <div class="video-wrapper paused">
-            <video src="img\garbage.MP4"></video>
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/garbage.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
-          <div class="video-wrapper paused">
-            <video src="img/objectterrible.MP4"></video>
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/objectterrible.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
-          <div class="video-wrapper paused">
-            <video src="img\sponge.MP4"></video>
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/sponge.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
-          <div class="video-wrapper paused">
-            <video src="img\opener.MP4"></video>
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/opener.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
-          <div class="video-wrapper paused">
-            <video src="img\gaga.MP4"></video>
+
+          <div class="video-wrapper paused not-loaded">
+            <video data-src="img/gaga.MP4" preload="none" playsinline></video>
             <button class="play-pause-btn" aria-label="Play/Pause">
               <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
+
         </div>
       </div>
 
       <div class="shop-column">
         <div class="section-header"><img src="img/drawings.png" alt="drawings Icon" /></div>
-        <div class="gallery-item"><img src="img/1.png" alt="superposition" /></div>
-        <div class="gallery-item"><img src="img/2.png" alt="nonsence" /></div>
-        <div class="gallery-item"><img src="img/3.png" alt="oompalumpa" /></div>
-        <div class="gallery-item"><img src="img/4.png" alt="philosopher stone" /></div>
-        <div class="gallery-item"><img src="img/5.png" alt="good person" /></div>
-        <div class="gallery-item"><img src="img/6.png" alt="mom" /></div>
-        <div class="gallery-item"><img src="img/7.png" alt="my cat" /></div>
-        <div class="gallery-item"><img src="img/8.png" alt="bad thing" /></div>
-        <div class="gallery-item"><img src="img/9.png" alt="found god" /></div>
+        <div class="gallery-item"><img src="img/1.png" alt="superposition" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/2.png" alt="nonsence" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/3.png" alt="oompalumpa" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/4.png" alt="philosopher stone" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/5.png" alt="good person" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/6.png" alt="mom" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/7.png" alt="my cat" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/8.png" alt="bad thing" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/9.png" alt="found god" loading="lazy" /></div>
       </div>
 
       <div class="shop-column">
         <div class="section-header"><img src="img/objects.png" alt="objects Icon" /></div>
-        <div class="gallery-item"><img src="img\tel.JPG" alt="noname" /></div>
-        <div class="gallery-item"><img src="img\terrible.JPG" alt="noname" /></div>
-        <div class="gallery-item"><img src="img\dart.JPG" alt="noname" /></div>
-          <div class="video-wrapper paused">
-            <video src="img\chicken.MP4"></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-            </button>
+        <div class="gallery-item"><img src="img/tel.JPG" alt="noname" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/terrible.JPG" alt="noname" loading="lazy" /></div>
+        <div class="gallery-item"><img src="img/dart.JPG" alt="noname" loading="lazy" /></div>
+        <div class="video-wrapper paused not-loaded">
+          <video data-src="img/chicken.MP4" preload="none" playsinline></video>
+          <button class="play-pause-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -574,7 +607,7 @@
   </footer>
 
   <script>
-    
+    /* ─── Lightbox ─────────────────────────────────────────────────────── */
     const galleryItems = document.querySelectorAll(".gallery-item img");
     const lightbox = document.getElementById("lightbox");
     const lightboxImg = document.getElementById("lightbox-img");
@@ -589,21 +622,16 @@
       });
     });
 
-    lightboxClose.addEventListener("click", () => {
-      lightbox.style.display = "none";
-    });
+    lightboxClose.addEventListener("click", () => { lightbox.style.display = "none"; });
+    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.style.display = "none"; });
 
-    lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) lightbox.style.display = "none";
-    });
-
-    
-    const playIcon = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg>`;
+    /* ─── Video play/pause icons ───────────────────────────────────────── */
+    const playIcon  = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg>`;
     const pauseIcon = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>`;
 
-    document.querySelectorAll(".video-wrapper").forEach(wrapper => {
+    function initVideoWrapper(wrapper) {
       const video = wrapper.querySelector("video");
-      const btn = wrapper.querySelector(".play-pause-btn");
+      const btn   = wrapper.querySelector(".play-pause-btn");
 
       function togglePlay() {
         if (video.paused) {
@@ -617,30 +645,48 @@
         }
       }
 
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        togglePlay();
-      });
-
+      btn.addEventListener("click", (e) => { e.stopPropagation(); togglePlay(); });
       video.addEventListener("click", togglePlay);
-
       video.addEventListener("ended", () => {
         btn.innerHTML = playIcon;
         wrapper.classList.add("paused");
       });
-    });
+    }
 
-    
-    const match = document.getElementById("match");
+    /* ─── Lazy-load videos via IntersectionObserver ────────────────────── */
+    // rootMargin: start loading 300px before the video enters the viewport
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+
+        const wrapper = entry.target;
+        const video   = wrapper.querySelector("video");
+        const dataSrc = video.getAttribute("data-src");
+
+        if (dataSrc && !video.src) {
+          video.src = dataSrc;          // triggers network request only now
+          video.load();                 // needed after setting src dynamically
+          wrapper.classList.remove("not-loaded");
+          initVideoWrapper(wrapper);    // attach controls after src is set
+        }
+
+        videoObserver.unobserve(wrapper); // stop watching once loaded
+      });
+    }, { rootMargin: "300px 0px" });     // 300px pre-load buffer
+
+    document.querySelectorAll(".video-wrapper").forEach(w => videoObserver.observe(w));
+
+    /* ─── Match scroll animation ───────────────────────────────────────── */
+    const match    = document.getElementById("match");
     const matchbox = document.getElementById("matchbox");
     const matchHeight = 80;
 
     window.addEventListener("scroll", () => {
-      const boxHeight = matchbox.offsetHeight;
-      const maxTop = boxHeight - matchHeight;
+      const boxHeight       = matchbox.offsetHeight;
+      const maxTop          = boxHeight - matchHeight;
       const scrollableHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollRatio = Math.min(1, window.scrollY / scrollableHeight);
-      const matchTop = scrollRatio * maxTop;
+      const scrollRatio     = Math.min(1, window.scrollY / scrollableHeight);
+      const matchTop        = scrollRatio * maxTop;
 
       match.style.top = matchTop + "px";
 
