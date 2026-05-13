@@ -9,53 +9,136 @@
   <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&display=swap" rel="stylesheet">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body, html {
+    html { scroll-behavior: smooth; }   /* JS smooth-scroll fallback added below */
+
+    body {
       font-family: "Bitcount Single", Arial, sans-serif;
-      scroll-behavior: smooth;
       background: #ffffff;
-      transition: background-color 0.6s ease;
+      -webkit-transition: background-color 0.6s ease;
+              transition: background-color 0.6s ease;
     }
 
     body.burning { background: rgba(255,255,255,0.8); }
 
     /* ── NAVBAR ── */
     .navbar {
-      position: sticky; top: 0;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
       background: rgb(255,255,255);
       border: solid black 2px;
-      backdrop-filter: blur(5px);
-      display: flex; flex-wrap: wrap;
-      align-items: center; justify-content: space-between;
+      /* Safari 9+ prefix */
+      -webkit-backdrop-filter: blur(5px);
+              backdrop-filter: blur(5px);
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: justify;
+          -ms-flex-pack: justify;
+              justify-content: space-between;
       padding: 10px 60px;
       z-index: 9;
     }
     .navbar img { height: 60px; width: auto; }
-    .navbar ul { list-style: none; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+    .navbar ul {
+      list-style: none;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      gap: 20px;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+    }
     .navbar ul img { height: 40px; width: auto; cursor: pointer; }
+    /* gap fallback for older Safari/Firefox */
+    @supports not (gap: 20px) {
+      .navbar ul li { margin-right: 20px; }
+      .navbar ul li:last-child { margin-right: 0; }
+    }
 
     /* ── HERO ── */
     .scroll-frames {
-      position: relative; width: 100%; height: 100vh;
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      overflow: hidden;
     }
     .scroll-frames .bg-gif {
-      width: 35%; max-height: 60vh; object-fit: contain;
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; z-index: 0;
+      width: 35%;
+      max-height: 60vh;
+      -o-object-fit: contain;
+         object-fit: contain;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      margin: auto;
+      z-index: 0;
     }
     .contact-overlay {
-      position: relative; z-index: 2;
-      height: 100%; width: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: flex-end;
-      color: #000; padding: 40px 20px; text-align: center; margin-top: 25px;
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: end;
+          -ms-flex-pack: end;
+              justify-content: flex-end;
+      color: #000;
+      padding: 40px 20px;
+      text-align: center;
+      margin-top: 25px;
     }
     .contact-overlay img { height: 60px; margin-bottom: 20px; }
-    .contact-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; font-size: 1em; }
+    .contact-links {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      gap: 25px;
+      font-size: 1em;
+    }
+    @supports not (gap: 25px) {
+      .contact-links a { margin: 6px 12px; }
+    }
     .contact-links a {
-      color: #111; text-decoration: none;
-      padding: 6px 14px; border-radius: 6px; transition: all 0.2s ease;
+      color: #111;
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 6px;
+      -webkit-transition: all 0.2s ease;
+              transition: all 0.2s ease;
     }
     .contact-links a:hover { text-decoration: underline; }
 
@@ -64,76 +147,204 @@
 
     /* ── SHOP GRID ── */
     .shop-grid {
+      display: -ms-grid;
       display: grid;
+      -ms-grid-columns: (minmax(250px, 1fr))[3];
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 40px;
     }
+    /* IE/old-Edge ms-grid column fallback — not strictly needed but harmless */
+    @supports not (display: grid) {
+      .shop-grid {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+      }
+      .shop-column { -webkit-box-flex: 1; -ms-flex: 1 1 250px; flex: 1 1 250px; }
+    }
 
     .shop-column {
-      display: flex; flex-direction: column; align-items: center;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+              flex-direction: column;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
     }
 
     .section-header img { height: 60px; margin-bottom: 20px; }
 
     .gallery-item {
-      max-width: 480px; width: 100%;
-      margin-bottom: 30px; overflow: hidden;
+      max-width: 480px;
+      width: 100%;
+      margin-bottom: 30px;
+      overflow: hidden;
     }
     .gallery-item img {
-      width: 100%; height: auto; display: block;
-      object-fit: contain; cursor: pointer;
+      width: 100%;
+      height: auto;
+      display: block;
+      -o-object-fit: contain;
+         object-fit: contain;
+      cursor: pointer;
+      /* Prevent image drag ghost in Firefox */
+      -webkit-user-drag: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+              user-select: none;
     }
 
     /* ── VIDEO ── */
     .video-wrapper {
-      position: relative; width: 100%; margin-bottom: 20px; cursor: pointer;
+      position: relative;
+      width: 100%;
+      margin-bottom: 20px;
+      cursor: pointer;
     }
     .video-wrapper video {
-      width: 100%; height: auto; display: block;
-      object-fit: contain; min-height: 180px; background: #f0f0f0;
+      width: 100%;
+      height: auto;
+      display: block;
+      -o-object-fit: contain;
+         object-fit: contain;
+      min-height: 180px;
+      background: #f0f0f0;
+      /* Prevent default iOS tap highlight */
+      -webkit-tap-highlight-color: transparent;
     }
     .play-pause-btn {
-      position: absolute; bottom: 8px; left: 8px;
-      background: rgba(0,0,0,0.25); border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; opacity: 0; transition: opacity 0.3s ease;
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.25);
+      border: none;
+      border-radius: 50%;
+      width: 36px;   /* slightly larger — easier tap on mobile */
+      height: 36px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      -webkit-transition: opacity 0.3s ease;
+              transition: opacity 0.3s ease;
+      /* Remove default button styles across browsers */
+      -webkit-appearance: none;
+         -moz-appearance: none;
+              appearance: none;
+      padding: 0;
+      outline: none;
     }
+    /* Show button on hover (desktop) or when paused */
     .video-wrapper:hover .play-pause-btn,
     .video-wrapper.paused .play-pause-btn { opacity: 0.45; }
     .play-pause-btn:hover { opacity: 0.75 !important; }
-    .play-pause-btn svg { fill: #fff; width: 12px; height: 12px; }
+    /* Always show on touch devices (no hover) */
+    @media (hover: none) {
+      .video-wrapper .play-pause-btn { opacity: 0.45; }
+    }
+    .play-pause-btn svg { fill: #fff; width: 14px; height: 14px; }
 
     .video-wrapper.not-loaded video {
+      background: -webkit-gradient(linear, left center, right center, color-stop(25%, #f0f0f0), color-stop(50%, #e0e0e0), color-stop(75%, #f0f0f0));
       background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%; animation: shimmer 1.5s infinite;
+      background-size: 200% 100%;
+      -webkit-animation: shimmer 1.5s infinite;
+              animation: shimmer 1.5s infinite;
     }
 
     /* ── LIGHTBOX ── */
     #lightbox {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8); display: none;
-      justify-content: center; align-items: center; z-index: 9999;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      z-index: 9999;
     }
-    .lightbox-content { position: relative; max-width: 90%; max-height: 90%; text-align: center; }
-    .lightbox-content img { max-width: 100%; max-height: 80vh; object-fit: contain; }
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      text-align: center;
+    }
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 80vh;
+      -o-object-fit: contain;
+         object-fit: contain;
+    }
     #lightbox-caption { color: white; margin-top: 15px; }
-    #lightbox-close { position: absolute; top: -30px; right: 0; font-size: 2rem; color: white; cursor: pointer; }
+    #lightbox-close {
+      position: absolute;
+      top: -30px; right: 0;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      line-height: 1;
+      /* Ensure clickable area on touch */
+      padding: 4px 8px;
+    }
 
     /* ── ABOUT ── */
     #about { position: relative; overflow: hidden; }
     #about::before {
-      content: ""; background-size: contain; background-repeat: no-repeat;
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+      content: "";
+      background-size: contain;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
     }
     .about-content {
-      position: relative; z-index: 2;
-      display: flex; flex-direction: row;
-      justify-content: center; align-items: center;
-      gap: 60px; flex-wrap: wrap;
-      padding: 80px 20px; max-width: 1200px; margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+          -ms-flex-direction: row;
+              flex-direction: row;
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center;
+      gap: 60px;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+      padding: 80px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .about-image img { width: 300px; height: 300px; border-radius: 50%; object-fit: cover; }
+    .about-image img {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      -o-object-fit: cover;
+         object-fit: cover;
+    }
     .about-text { max-width: 500px; text-align: center; }
     .about-text img { width: 160px; margin-bottom: 20px; }
     .about-text p { font-size: 1.1em; color: #333; line-height: 1.6; }
@@ -143,55 +354,110 @@
 
     /* ── MATCHBOX ── */
     .matchbox-container {
-      position: fixed; right: 0; top: 0; height: 100%; width: 60px;
-      display: flex; align-items: flex-start; justify-content: flex-end;
-      z-index: 10; pointer-events: none;
+      position: fixed;
+      right: 0; top: 0;
+      height: 100%; width: 60px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+          -ms-flex-align: start;
+              align-items: flex-start;
+      -webkit-box-pack: end;
+          -ms-flex-pack: end;
+              justify-content: flex-end;
+      z-index: 10;
+      pointer-events: none;
     }
     .matchbox {
-      position: relative; width: 30px; height: 100%;
+      position: relative;
+      width: 30px;
+      height: 100%;
       background: rgba(255,255,255,0.8);
-      border: 2px dashed #333; border-radius: 4px 0 0 4px;
-      box-shadow: inset 0 0 5px #aaa;
+      border: 2px dashed #333;
+      border-radius: 4px 0 0 4px;
+      -webkit-box-shadow: inset 0 0 5px #aaa;
+              box-shadow: inset 0 0 5px #aaa;
     }
     .match {
-      position: absolute; right: 34px;
-      width: 6px; height: 80px;
+      position: absolute;
+      right: 34px;
+      width: 6px;
+      height: 80px;
       background: #bbb;
-      border-left: 1px solid #666; border-right: 1px solid #666;
-      border-radius: 3px; box-shadow: 1px 1px 1px #999;
-      transition: top 0.1s ease-out;
-      transform: rotate(5deg); transform-origin: top center;
+      border-left: 1px solid #666;
+      border-right: 1px solid #666;
+      border-radius: 3px;
+      -webkit-box-shadow: 1px 1px 1px #999;
+              box-shadow: 1px 1px 1px #999;
+      -webkit-transition: top 0.1s ease-out;
+              transition: top 0.1s ease-out;
+      -webkit-transform: rotate(5deg);
+          -ms-transform: rotate(5deg);
+              transform: rotate(5deg);
+      -webkit-transform-origin: top center;
+          -ms-transform-origin: top center;
+              transform-origin: top center;
     }
     .head {
-      width: 14px; height: 14px; background: #2e0505;
-      border-radius: 50%; border: 1px solid #222;
-      position: absolute; top: -8px; left: -5px;
+      width: 14px; height: 14px;
+      background: #2e0505;
+      border-radius: 50%;
+      border: 1px solid #222;
+      position: absolute;
+      top: -8px; left: -5px;
     }
     .flame {
-      position: absolute; top: -40px; left: -18px;
+      position: absolute;
+      top: -40px; left: -18px;
       width: 40px; height: 60px;
       background: radial-gradient(circle at center, rgb(255,38,0) 0%, rgba(255,81,0,0.7) 40%, rgba(0,150,0,0) 80%);
-      border-radius: 50%; opacity: 0;
-      transform: scale(0.4) translateY(20px);
+      border-radius: 50%;
+      opacity: 0;
+      -webkit-transform: scale(0.4) translateY(20px);
+          -ms-transform: scale(0.4) translateY(20px);
+              transform: scale(0.4) translateY(20px);
       pointer-events: none;
-      filter: blur(1.5px) brightness(1.6);
-      box-shadow: 0 0 20px rgba(255,88,88,0.8), 0 0 60px rgba(252,22,22,0.4), 0 0 120px rgba(255,0,0,0.356);
-      mix-blend-mode: screen; z-index: 9999; transition: opacity 0.3s ease;
+      -webkit-filter: blur(1.5px) brightness(1.6);
+              filter: blur(1.5px) brightness(1.6);
+      -webkit-box-shadow: 0 0 20px rgba(255,88,88,0.8), 0 0 60px rgba(252,22,22,0.4), 0 0 120px rgba(255,0,0,0.356);
+              box-shadow: 0 0 20px rgba(255,88,88,0.8), 0 0 60px rgba(252,22,22,0.4), 0 0 120px rgba(255,0,0,0.356);
+      /* mix-blend-mode:screen unsupported in IE — graceful degradation is fine */
+      mix-blend-mode: screen;
+      z-index: 9999;
+      -webkit-transition: opacity 0.3s ease;
+              transition: opacity 0.3s ease;
     }
     .burning .flame {
       opacity: 1;
-      animation: burn 1s infinite ease-in-out, flame-rise 1s forwards ease-in-out;
+      -webkit-animation: burn 1s infinite ease-in-out, flame-rise 1s forwards ease-in-out;
+              animation: burn 1s infinite ease-in-out, flame-rise 1s forwards ease-in-out;
     }
 
     /* ── ANIMATIONS ── */
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
+    @-webkit-keyframes shimmer {
+      0%   { background-position: 200% 0; }
       100% { background-position: -200% 0; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @-webkit-keyframes burn {
+      0%   { -webkit-transform: scale(0.7) translateY(10px)  rotate(0deg);  transform: scale(0.7) translateY(10px)  rotate(0deg);  opacity: 0.95; }
+      50%  { -webkit-transform: scale(1.1) translateY(-5px)  rotate(5deg);  transform: scale(1.1) translateY(-5px)  rotate(5deg);  opacity: 0.8; }
+      100% { -webkit-transform: scale(0.9) translateY(0px)   rotate(-4deg); transform: scale(0.9) translateY(0px)   rotate(-4deg); opacity: 1; }
     }
     @keyframes burn {
       0%   { transform: scale(0.7) translateY(10px)  rotate(0deg);  opacity: 0.95; }
       50%  { transform: scale(1.1) translateY(-5px)  rotate(5deg);  opacity: 0.8; }
       100% { transform: scale(0.9) translateY(0px)   rotate(-4deg); opacity: 1; }
+    }
+
+    @-webkit-keyframes flame-rise {
+      0%   { -webkit-transform: scale(0.4) translateY(20px); transform: scale(0.4) translateY(20px); }
+      100% { -webkit-transform: scale(1)   translateY(-40px); transform: scale(1)   translateY(-40px); }
     }
     @keyframes flame-rise {
       0%   { transform: scale(0.4) translateY(20px); }
@@ -202,22 +468,31 @@
     @media (max-width: 1024px) {
       section#shop { padding: 40px 0; }
 
-      .shop-grid { grid-template-columns: 1fr; gap: 0; }
+      .shop-grid {
+        -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
 
       .shop-column {
         width: 100%;
-        align-items: stretch;   /* children stretch to full column width */
+        -webkit-box-align: stretch;
+            -ms-flex-align: stretch;
+                align-items: stretch;
       }
 
       .shop-column + .shop-column { margin-top: 40px; }
 
       .section-header {
         width: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        justify-content: center;
+        -webkit-box-pack: center;
+            -ms-flex-pack: center;
+                justify-content: center;
       }
 
-      /* kill the 480px desktop cap */
       .gallery-item {
         max-width: none;
         width: 100%;
@@ -239,16 +514,29 @@
         width: 100%;
         height: auto;
         min-height: unset;
-        object-fit: contain;
+        -o-object-fit: contain;
+           object-fit: contain;
       }
     }
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
-      .about-content { flex-direction: column; padding: 40px 20px; }
+      .about-content {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        padding: 40px 20px;
+      }
       .about-image img { width: 200px; height: 200px; }
-      .navbar { flex-direction: column; gap: 10px; }
-      .navbar ul { justify-content: center; }
+      .navbar {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        gap: 10px;
+      }
+      .navbar ul { -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
       .contact-overlay { padding: 20px 10px; }
       .contact-links { gap: 15px; font-size: 0.9em; }
       .section-header img { height: 40px; }
@@ -273,7 +561,7 @@
     <div class="contact-overlay">
       <img src="img/contact.png" alt="Contact Title" />
       <div class="contact-links">
-        <a href="https://www.instagram.com/marypops32/" target="_blank">INSTAGRAM</a>
+        <a href="https://www.instagram.com/marypops32/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
         <a href="mailto:marypops10032000 AT gmail.com">MAIL</a>
       </div>
     </div>
@@ -294,48 +582,48 @@
     <div class="shop-grid">
 
       <div class="shop-column">
-        <div class="section-header"><img src="img/kinetic.png" alt="Drawing Icon" /></div>
+        <div class="section-header"><img src="img/kinetic.png" alt="Kinetic" /></div>
         <div class="gallery-item">
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/sponge.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/sponge.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/cheerleader.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/cheerleader.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/garbage.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/garbage.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/objectterrible.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/objectterrible.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/opener.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/opener.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/gaga.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/gaga.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
 
@@ -343,7 +631,7 @@
       </div>
 
       <div class="shop-column">
-        <div class="section-header"><img src="img/drawings.png" alt="drawings Icon" /></div>
+        <div class="section-header"><img src="img/drawings.png" alt="Drawings" /></div>
         <div class="gallery-item"><img src="img/1.png" alt="superposition" loading="lazy" /></div>
         <div class="gallery-item"><img src="img/2.png" alt="nonsence" loading="lazy" /></div>
         <div class="gallery-item"><img src="img/3.png" alt="oompalumpa" loading="lazy" /></div>
@@ -356,15 +644,15 @@
       </div>
 
       <div class="shop-column">
-        <div class="section-header"><img src="img/objects.png" alt="objects Icon" /></div>
+        <div class="section-header"><img src="img/objects.png" alt="Objects" /></div>
         <div class="gallery-item"><img src="img/tel.JPG" alt="noname" loading="lazy" /></div>
         <div class="gallery-item"><img src="img/terrible.JPG" alt="noname" loading="lazy" /></div>
         <div class="gallery-item"><img src="img/dart.JPG" alt="noname" loading="lazy" /></div>
         <div class="gallery-item">
           <div class="video-wrapper paused not-loaded">
-            <video data-src="img/chicken.MP4" preload="none" playsinline></video>
-            <button class="play-pause-btn" aria-label="Play/Pause">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            <video data-src="img/chicken.MP4" preload="none" playsinline muted></video>
+            <button class="play-pause-btn" type="button" aria-label="Play/Pause">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>
             </button>
           </div>
         </div>
@@ -384,100 +672,175 @@
     </div>
   </section>
 
-  <div id="lightbox">
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
     <div class="lightbox-content">
       <img id="lightbox-img" src="" alt="Zoomed image" />
       <p id="lightbox-caption"></p>
-      <span id="lightbox-close">&times;</span>
+      <span id="lightbox-close" role="button" tabindex="0" aria-label="Close">&times;</span>
     </div>
   </div>
 
   <footer>
-    All rights reserved © 2026
+    All rights reserved &copy; 2026
   </footer>
 
   <script>
-    const galleryItems = document.querySelectorAll(".gallery-item img");
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
-    const lightboxCaption = document.getElementById("lightbox-caption");
-    const lightboxClose = document.getElementById("lightbox-close");
+    /* ── SMOOTH SCROLL POLYFILL for Safari < 15.4 & Firefox < 36 ── */
+    (function () {
+      if (!('scrollBehavior' in document.documentElement.style)) {
+        document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
+          anchor.addEventListener('click', function (e) {
+            var target = document.getElementById(this.getAttribute('href').slice(1));
+            if (!target) return;
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          });
+        });
+      }
+    })();
 
-    galleryItems.forEach(img => {
-      img.addEventListener("click", () => {
-        lightboxImg.src = img.src;
-        lightboxCaption.textContent = img.alt || "Artwork detail";
-        lightbox.style.display = "flex";
+    /* ── LIGHTBOX ── */
+    var galleryItems   = document.querySelectorAll('.gallery-item img');
+    var lightbox       = document.getElementById('lightbox');
+    var lightboxImg    = document.getElementById('lightbox-img');
+    var lightboxCap    = document.getElementById('lightbox-caption');
+    var lightboxClose  = document.getElementById('lightbox-close');
+
+    function openLightbox(src, caption) {
+      lightboxImg.src = src;
+      lightboxCap.textContent = caption || 'Artwork detail';
+      lightbox.style.display = 'flex';
+      document.body.style.overflow = 'hidden'; /* prevent background scroll */
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    galleryItems.forEach(function (img) {
+      img.addEventListener('click', function () {
+        openLightbox(img.src, img.alt);
       });
     });
 
-    lightboxClose.addEventListener("click", () => { lightbox.style.display = "none"; });
-    lightbox.addEventListener("click", (e) => { if (e.target === lightbox) lightbox.style.display = "none"; });
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') closeLightbox();
+    });
+    lightbox.addEventListener('click', function (e) {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightbox.style.display === 'flex') closeLightbox();
+    });
 
-    const playIcon  = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><polygon points="5,3 19,12 5,21"/></svg>`;
-    const pauseIcon = `<svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>`;
+    /* ── VIDEO ── */
+    var playIcon  = '<svg viewBox="0 0 24 24" fill="#fff" width="14" height="14" aria-hidden="true"><polygon points="5,3 19,12 5,21"/></svg>';
+    var pauseIcon = '<svg viewBox="0 0 24 24" fill="#fff" width="14" height="14" aria-hidden="true"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>';
 
     function initVideoWrapper(wrapper) {
-      const video = wrapper.querySelector("video");
-      const btn   = wrapper.querySelector(".play-pause-btn");
+      var video = wrapper.querySelector('video');
+      var btn   = wrapper.querySelector('.play-pause-btn');
 
       function togglePlay() {
         if (video.paused) {
-          video.play();
-          btn.innerHTML = pauseIcon;
-          wrapper.classList.remove("paused");
+          /* Pause all other videos first — avoids multiple concurrent playbacks */
+          document.querySelectorAll('video').forEach(function (v) {
+            if (v !== video && !v.paused) { v.pause(); }
+          });
+          var playPromise = video.play();
+          /* Handle browsers that return a Promise from play() */
+          if (playPromise !== undefined) {
+            playPromise.then(function () {
+              btn.innerHTML = pauseIcon;
+              wrapper.classList.remove('paused');
+            }).catch(function () {
+              /* Autoplay blocked — leave paused state */
+            });
+          } else {
+            btn.innerHTML = pauseIcon;
+            wrapper.classList.remove('paused');
+          }
         } else {
           video.pause();
           btn.innerHTML = playIcon;
-          wrapper.classList.add("paused");
+          wrapper.classList.add('paused');
         }
       }
 
-      btn.addEventListener("click", (e) => { e.stopPropagation(); togglePlay(); });
-      video.addEventListener("click", togglePlay);
-      video.addEventListener("ended", () => {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); togglePlay(); });
+      video.addEventListener('click', togglePlay);
+      video.addEventListener('ended', function () {
         btn.innerHTML = playIcon;
-        wrapper.classList.add("paused");
+        wrapper.classList.add('paused');
       });
     }
 
-    const videoObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const wrapper = entry.target;
-        const video   = wrapper.querySelector("video");
-        const dataSrc = video.getAttribute("data-src");
-        if (dataSrc && !video.src) {
+    /* IntersectionObserver for lazy-loading videos */
+    if ('IntersectionObserver' in window) {
+      var videoObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var wrapper = entry.target;
+          var video   = wrapper.querySelector('video');
+          var dataSrc = video.getAttribute('data-src');
+          if (dataSrc && !video.getAttribute('src')) {
+            video.src = dataSrc;
+            video.load();
+            wrapper.classList.remove('not-loaded');
+            initVideoWrapper(wrapper);
+          }
+          videoObserver.unobserve(wrapper);
+        });
+      }, { rootMargin: '300px 0px' });
+
+      document.querySelectorAll('.video-wrapper').forEach(function (w) {
+        videoObserver.observe(w);
+      });
+    } else {
+      /* Fallback: load all videos immediately for browsers without IntersectionObserver */
+      document.querySelectorAll('.video-wrapper').forEach(function (wrapper) {
+        var video   = wrapper.querySelector('video');
+        var dataSrc = video.getAttribute('data-src');
+        if (dataSrc) {
           video.src = dataSrc;
           video.load();
-          wrapper.classList.remove("not-loaded");
+          wrapper.classList.remove('not-loaded');
           initVideoWrapper(wrapper);
         }
-        videoObserver.unobserve(wrapper);
       });
-    }, { rootMargin: "300px 0px" });
+    }
 
-    document.querySelectorAll(".video-wrapper").forEach(w => videoObserver.observe(w));
+    /* ── MATCHBOX SCROLL ── */
+    var match    = document.getElementById('match');
+    var matchbox = document.getElementById('matchbox');
+    var matchHeight = 80;
 
-    const match    = document.getElementById("match");
-    const matchbox = document.getElementById("matchbox");
-    const matchHeight = 80;
+    function updateMatch() {
+      var boxHeight        = matchbox.offsetHeight;
+      var maxTop           = boxHeight - matchHeight;
+      var scrollableHeight = document.body.scrollHeight - window.innerHeight;
+      /* Avoid division by zero on very short pages */
+      var scrollRatio      = scrollableHeight > 0
+        ? Math.min(1, window.pageYOffset / scrollableHeight)
+        : 0;
 
-    window.addEventListener("scroll", () => {
-      const boxHeight        = matchbox.offsetHeight;
-      const maxTop           = boxHeight - matchHeight;
-      const scrollableHeight = document.body.scrollHeight - window.innerHeight;
-      const scrollRatio      = Math.min(1, window.scrollY / scrollableHeight);
-      match.style.top        = (scrollRatio * maxTop) + "px";
+      match.style.top = (scrollRatio * maxTop) + 'px';
 
       if (scrollRatio >= 0.99) {
-        match.classList.add("burning");
-        document.body.classList.add("burning");
+        match.classList.add('burning');
+        document.body.classList.add('burning');
       } else {
-        match.classList.remove("burning");
-        document.body.classList.remove("burning");
+        match.classList.remove('burning');
+        document.body.classList.remove('burning');
       }
-    });
+    }
+
+    /* Use passive listener for better scroll performance on mobile */
+    window.addEventListener('scroll', updateMatch, { passive: true });
+    /* Trigger once on load in case page is pre-scrolled */
+    updateMatch();
   </script>
 </body>
 </html>
